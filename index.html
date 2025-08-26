@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>通讯录系统 - 知识图谱</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/mobile.css">
+  <style>
+    /* 自定义模态框过渡效果 */
+    .modal {
+      transition: opacity 0.3s ease;
+    }
+    
+    /* 改进关联选择的用户体验 */
+    .form-select[multiple] {
+      height: auto;
+      min-height: 100px;
+      background-image: none;
+    }
+    
+    .relation-container {
+      border: 1px solid var(--background-modifier-border);
+      border-radius: 8px;
+      padding: 10px;
+      background-color: rgba(0, 0, 0, 0.1);
+      margin-bottom: 15px;
+    }
+    
+    .selected-tag {
+      display: inline-flex;
+      align-items: center;
+      background-color: var(--background-modifier-hover);
+      border-radius: 16px;
+      padding: 3px 8px;
+      margin: 3px;
+      font-size: 12px;
+    }
+    
+    .selected-tag .remove-tag {
+      margin-left: 5px;
+      cursor: pointer;
+      color: var(--text-muted);
+    }
+    
+    .selected-tag .remove-tag:hover {
+      color: #ff4d4f;
+    }
+    
+    .selected-tags-container {
+      display: flex;
+      flex-wrap: wrap;
+      margin-top: 5px;
+      min-height: 30px;
+      border: 1px dashed var(--background-modifier-border);
+      border-radius: 4px;
+      padding: 5px;
+    }
+    
+    /* 空信息的样式 */
+    .empty-info {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px;
+      font-style: italic;
+      border: 1px dashed var(--background-modifier-border);
+      border-radius: 4px;
+      margin-top: 5px;
+    }
+    
+    /* 联系方式图标样式优化 */
+    .contact-info-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 8px;
+      padding: 5px 10px;
+      border-radius: 4px;
+      background-color: rgba(0, 0, 0, 0.1);
+      transition: background-color 0.2s;
+    }
+    
+    .contact-info-item:hover {
+      background-color: rgba(123, 104, 238, 0.1);
+    }
+    
+    .contact-info-item i {
+      width: 20px;
+      margin-right: 10px;
+      color: var(--text-accent);
+      text-align: center;
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+  <script src="https://cdn.jsdelivr.net/npm/force-graph@1.43.0/dist/force-graph.min.js"></script>
+  
+</head>
+<body>
+  <!-- 移动端导航切换按钮 -->
+  <button class="mobile-nav-toggle" id="mobileNavToggle">
+    <i class="bi bi-list"></i>
+  </button>
+  
+  <div class="app-container">
+    <!-- 侧边栏 -->
+    <div class="sidebar">
+      <div class="sidebar-header">
+        <h1 class="sidebar-title">ConnectMe</h1>
+      </div>
+      
+      <div class="navigation-grid">
+        <div class="nav-button active" data-tab="contacts">
+          <i class="bi bi-person-fill"></i>
+          <span>联系人</span>
+        </div>
+        <div class="nav-button" data-tab="tags">
+          <i class="bi bi-tags-fill"></i>
+          <span>标签</span>
+        </div>
+      </div>
+      
+      <div class="list-container" id="listContainer">
+        <!-- 列表内容将动态加载 -->
+        <div class="list-loading">加载中...</div>
+      </div>
+    </div>
+    
+    <!-- 主内容区 -->
+    <div class="main-content">
+      <div class="graph-container" id="graphContainer"></div>
+      
+      <!-- 详情面板 -->
+      <div class="detail-panel" id="detailPanel">
+        <div class="detail-close" id="detailClose">
+          <i class="bi bi-x-lg"></i>
+        </div>
+        <div class="detail-header">
+          <h2 class="detail-title" id="detailTitle">联系人详情</h2>
+          <p class="detail-subtitle" id="detailSubtitle"></p>
+          <div class="detail-actions">
+            <button class="btn btn-sm btn-outline-primary" id="editButton">
+              <i class="bi bi-pencil"></i> 编辑
+            </button>
+            <button class="btn btn-sm btn-outline-danger" id="deleteButton">
+              <i class="bi bi-trash"></i> 删除
+            </button>
+          </div>
+        </div>
+        <div class="detail-content" id="detailContent">
+          <!-- 详情内容将动态加载 -->
+        </div>
+      </div>
+      
+      <!-- 工具栏 -->
+      <div class="toolbar">
+        <div class="toolbar-button" id="zoomInButton" title="放大">
+          <i class="bi bi-plus-lg"></i>
+        </div>
+        <div class="toolbar-button" id="zoomOutButton" title="缩小">
+          <i class="bi bi-dash-lg"></i>
+        </div>
+        <div class="toolbar-button" id="resetButton" title="重置视图">
+          <i class="bi bi-arrows-fullscreen"></i>
+        </div>
+      </div>
+      
+      <!-- 智能搜索栏 -->
+      <div class="search-container" id="searchContainer">
+        <div class="search-bar">
+          <div class="search-input-wrapper">
+            <i class="bi bi-search search-icon"></i>
+            <input type="text" id="searchInput" class="search-input" placeholder="问我任何关于联系人的问题，比如：周周黑客松的独立开发者都有谁？">
+            <button class="search-button" id="searchButton">
+              <i class="bi bi-send-fill"></i>
+            </button>
+          </div>
+        </div>
+        
+        <!-- 搜索结果显示区域 -->
+        <div class="search-results" id="searchResults" style="display: none;">
+          <div class="search-results-header">
+            <h4 class="search-results-title">搜索结果</h4>
+            <button class="search-results-close" id="searchResultsClose">
+              <i class="bi bi-x-lg"></i>
+            </button>
+          </div>
+          <div class="search-results-content" id="searchResultsContent">
+            <!-- 搜索结果将动态加载 -->
+          </div>
+        </div>
+        
+        <!-- 搜索加载状态 -->
+        <div class="search-loading" id="searchLoading" style="display: none;">
+          <div class="loading-spinner"></div>
+          <span>AI正在思考中...</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 错误显示容器 -->
+  <div id="errorContainer" class="error-container"></div>
+  
+  <!-- 添加按钮 - 悬浮在左下角 -->
+  <button class="add-button" id="addButton" title="添加新条目">
+    <i class="bi bi-plus-lg"></i>
+  </button>
+  
+  <!-- 添加新条目的模态框 -->
+  <div class="modal" id="addModal">
+    <div class="modal-content">
+      <!-- 模态框头部 -->
+      <div class="modal-header">
+        <div class="modal-header-content">
+          <div class="modal-icon">
+            <i class="bi bi-plus-circle-fill"></i>
+          </div>
+          <div class="modal-title-section">
+            <h3 class="modal-title" id="modalTitle">添加新条目</h3>
+            <p class="modal-subtitle">创建新的联系人或标签</p>
+          </div>
+        </div>
+        <button class="modal-close" id="modalClose">
+          <i class="bi bi-x-lg"></i>
+        </button>
+      </div>
+      
+      <!-- 优化的标签页导航 -->
+      <div class="modal-nav">
+        <div class="modal-nav-container">
+          <div class="modal-nav-tab active" data-form="contactForm">
+            <div class="modal-nav-tab-icon">
+              <i class="bi bi-person-fill"></i>
+            </div>
+            <div class="modal-nav-tab-text">联系人</div>
+          </div>
+
+          <div class="modal-nav-tab" data-form="tagForm">
+            <div class="modal-nav-tab-icon">
+              <i class="bi bi-tag-fill"></i>
+            </div>
+            <div class="modal-nav-tab-text">标签</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- 表单容器 -->
+      <div class="modal-body">
+        <div class="modal-form-container">
+          <!-- 联系人表单 -->
+          <div id="contactForm" class="form-card">
+            <!-- 基本信息卡片 -->
+            <div class="form-section">
+              <div class="section-header">
+                <h4 class="section-title">基本信息</h4>
+              </div>
+              <div class="form-grid">
+                <div class="form-group">
+                  <label class="form-label" for="contactName">姓名 <span class="required">*</span></label>
+                  <input type="text" id="contactName" class="form-control" placeholder="请输入姓名">
+                </div>
+              </div>
+            </div>
+            
+            <!-- 联系方式卡片 -->
+            <div class="form-section">
+              <div class="section-header">
+                <h4 class="section-title">联系方式</h4>
+              </div>
+              <div class="form-grid">
+                 <div class="form-group">
+                   <label class="form-label" for="contactPhone">
+                     <i class="bi bi-telephone"></i> 电话
+                   </label>
+                   <input type="text" id="contactPhone" class="form-control" placeholder="请输入电话号码">
+                 </div>
+                 <div class="form-group">
+                   <label class="form-label" for="contactEmail">
+                     <i class="bi bi-envelope"></i> 邮箱
+                   </label>
+                   <input type="email" id="contactEmail" class="form-control" placeholder="请输入邮箱地址">
+                 </div>
+                 <div class="form-group">
+                   <label class="form-label" for="contactWechat">
+                     <i class="bi bi-wechat"></i> 微信号
+                   </label>
+                   <input type="text" id="contactWechat" class="form-control" placeholder="请输入微信号">
+                 </div>
+                 <div class="form-group full-width">
+                   <label class="form-label" for="contactAvatar">
+                     <i class="bi bi-image"></i> 头像
+                   </label>
+                   <div id="avatarUploaderContainer" class="avatar-uploader-container">
+                     <!-- 现代化头像上传组件将在这里初始化 -->
+                   </div>
+                 </div>
+               </div>
+             </div>
+            
+            <!-- 关联信息卡片 -->
+            <div class="form-section">
+              <div class="section-header">
+                <h4 class="section-title">关联信息</h4>
+              </div>
+              
+              <div class="relations-grid">
+                <!-- 标签关联 -->
+                <div class="relation-card full-width">
+                  <div class="relation-header">
+                    <i class="bi bi-tags"></i>
+                    <label class="relation-label">关联标签</label>
+                  </div>
+                  <select id="contactTags" class="form-select relation-select" multiple size="3">
+                    <!-- 标签选项将动态加载 -->
+                  </select>
+                  <div class="selected-items" id="selectedContactTags">
+                    <!-- 已选择的标签将在这里显示 -->
+                  </div>
+                </div>
+              </div>
+            </div>
+        <!-- 个人简介卡片 -->
+            <div class="form-section">
+              <div class="section-header">
+                <h4 class="section-title">个人简介</h4>
+              </div>
+              <div class="form-group">
+                <textarea id="contactProfile" class="form-control" rows="4" placeholder="请输入个人简介，描述个人背景、专业技能或其他相关信息..."></textarea>
+              </div>
+            </div>
+          </div>
+      
+
+          
+          <!-- 标签表单 -->
+          <div id="tagForm" class="form-card" style="display: none;">
+            <!-- 基本信息卡片 -->
+            <div class="form-section">
+              <div class="section-header">
+                <h4 class="section-title">标签信息</h4>
+              </div>
+              <div class="form-grid">
+                <div class="form-group full-width">
+                  <label class="form-label" for="tagName">标签名称 <span class="required">*</span></label>
+                  <input type="text" id="tagName" class="form-control" placeholder="请输入标签名称（如：双子座、技术专家、创业者等）">
+                  <div class="form-hint">
+                    <i class="bi bi-info-circle"></i>
+                    <span>标签用于建立更广泛的连接关系，在知识图谱中显示为重要节点</span>
+                  </div>
+                </div>
+                <div class="form-group full-width">
+                  <label class="form-label" for="tagDescription">标签描述</label>
+                  <textarea id="tagDescription" class="form-control" rows="3" placeholder="请输入标签描述，详细说明这个标签的含义和用途..."></textarea>
+                  <div class="form-hint">
+                    <i class="bi bi-info-circle"></i>
+                    <span>描述可以帮助更好地理解标签的用途和含义</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- 关联信息卡片 -->
+            <div class="form-section">
+              <div class="section-header">
+                <h4 class="section-title">关联信息</h4>
+              </div>
+              
+              <div class="relations-grid">
+                <!-- 标签关联 -->
+                <div class="relation-card full-width">
+                  <div class="relation-header">
+                    <i class="bi bi-tags"></i>
+                    <label class="relation-label">关联标签</label>
+                  </div>
+                  <select id="tagRelatedTags" class="form-select relation-select" multiple size="3">
+                    <!-- 标签选项将动态加载 -->
+                  </select>
+                  <div class="selected-items" id="selectedTagRelatedTags">
+                    <!-- 已选择的标签将在这里显示 -->
+                  </div>
+                  <div class="form-hint">
+                    <i class="bi bi-info-circle"></i>
+                    <span>选择与此标签相关的其他标签，建立标签间的关联关系</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+      </div>
+      
+      
+      <!-- 模态框底部 -->
+      <div class="modal-footer">
+        <div class="footer-actions">
+          <button class="btn btn-secondary" id="modalCancel">
+            <i class="bi bi-x-circle btn-icon"></i>
+            <span class="btn-text">取消</span>
+            <div class="btn-spinner"></div>
+          </button>
+          <button class="btn btn-primary" id="modalSave">
+            <i class="bi bi-check-circle btn-icon"></i>
+            <span class="btn-text">保存</span>
+            <div class="btn-spinner"></div>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 新的模块化组件 -->
+  <script src="js/errorHandler.js"></script>
+  <script src="js/fileValidator.js"></script>
+  <script src="js/imageProcessor.js"></script>
+  <script src="js/performanceOptimizer.js"></script>
+  <script src="js/securityEnhancer.js"></script>
+  <script src="js/accessibilityEnhancer.js"></script>
+  <script src="js/avatarUploader.js"></script>
+  
+  <!-- 样式文件 -->
+  <link rel="stylesheet" href="css/avatarUploader.css">
+  
+  <!-- 主脚本 -->
+  <script src="js/script.js"></script>
+</body>
+</html>

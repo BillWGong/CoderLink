@@ -1,0 +1,86 @@
+[
+  {
+    "_id": "551b3a56-e22d-4c62-b624-14427a7d79e4",
+    "name": "熵增力场",
+    "description": "熵增力场是空间智能体的研发商，致力于结合空间计算和AI技术，做虚实融合的智能物联网解决方案。",
+    "organizations": [
+      {
+        "_id": "888441f7-c774-4a64-8ae2-af3ba58ce957",
+        "name": "奇绩创坛"
+      }
+    ],
+    "createdAt": "2025-04-19T10:58:54.307Z",
+    "updatedAt": "2025-04-20T07:17:15.781Z"
+  },
+  {
+    "_id": "1dbe3cea-d767-43a2-be00-16fa26f17029",
+    "name": "新范式人工智能",
+    "description": "暂无简介",
+    "organizations": [],
+    "createdAt": "2025-04-20T07:02:43.785Z"
+  },
+  {
+    "_id": "1e8f3abd-dd97-472d-bf2d-c8fd68df8a7a",
+    "name": "北京迈达斯技术有限公司",
+    "description": "专业的建筑软件SaaS服务提供商，为建筑行业提供先进的技术解决方案。",
+    "organizations": [],
+    "createdAt": "2025-08-24T07:25:00.936Z",
+    "updatedAt": "2025-08-24T07:25:00.937Z"
+  },
+  {
+    "_id": "a724edc4-e98c-4548-9392-fa0bbd473165",
+    "name": "杭州北冥星眸科技有限公司",
+    "description": "专注于AI技术和数据服务的科技公司。",
+    "organizations": [],
+    "createdAt": "2025-08-24T07:25:00.937Z",
+    "updatedAt": "2025-08-24T07:25:00.937Z"
+  },
+  {
+    "_id": "67871e19-ddd2-45a0-a009-3cfe9a8b2e73",
+    "name": "腾讯",
+    "description": "中国领先的互联网科技公司，提供社交、游戏、云计算等多元化服务。",
+    "organizations": [],
+    "createdAt": "2025-08-24T07:25:00.937Z",
+    "updatedAt": "2025-08-24T07:25:00.937Z"
+  },
+  {
+    "_id": "f2e76f1d-11b1-45f4-b01b-2dacccc30267",
+    "name": "OPPO",
+    "description": "全球领先的智能手机和智能设备制造商，专注于手机AI产品开发。",
+    "organizations": [],
+    "createdAt": "2025-08-24T07:25:00.937Z",
+    "updatedAt": "2025-08-24T07:25:00.937Z"
+  },
+  {
+    "_id": "bb7737c8-6126-4409-a05c-b1e95598fbce",
+    "name": "阿里巴巴",
+    "description": "中国最大的电子商务和云计算公司，业务涵盖电商、金融、物流等领域。",
+    "organizations": [],
+    "createdAt": "2025-08-24T07:25:00.937Z",
+    "updatedAt": "2025-08-24T07:25:00.937Z"
+  },
+  {
+    "_id": "7cb8fac6-5db1-4099-b4f8-e1dd61f727f8",
+    "name": "AstraCore量子星辰",
+    "description": "专注于量子计算和先进技术研发的创新科技公司。",
+    "organizations": [],
+    "createdAt": "2025-08-24T07:25:00.937Z",
+    "updatedAt": "2025-08-24T07:25:00.937Z"
+  },
+  {
+    "_id": "c58bc182-5732-4ae5-a3a8-c770ef057f4d",
+    "name": "字节跳动",
+    "description": "全球化的移动互联网公司，旗下拥有抖音、今日头条等知名产品。",
+    "organizations": [],
+    "createdAt": "2025-08-24T07:25:00.937Z",
+    "updatedAt": "2025-08-24T07:25:00.937Z"
+  },
+  {
+    "_id": "f143b00f-a36b-494d-967f-42979a67bce0",
+    "name": "LDR tech",
+    "description": "专业的金融科技公司，专注于风控算法和金融技术解决方案。",
+    "organizations": [],
+    "createdAt": "2025-08-24T07:25:00.937Z",
+    "updatedAt": "2025-08-24T07:25:00.937Z"
+  }
+]

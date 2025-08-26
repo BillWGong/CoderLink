@@ -1,0 +1,512 @@
+[
+  {
+    "_id": "551b3a56-e22d-4c62-b624-14427a7d79e4",
+    "name": "熵增力场",
+    "description": "熵增力场是空间智能体的研发商，致力于结合空间计算和AI技术，做虚实融合的智能物联网解决方案。",
+    "color": "#3B82F6",
+    "parent_tags": [
+      {
+        "_id": "888441f7-c774-4a64-8ae2-af3ba58ce957",
+        "name": "奇绩创坛"
+      }
+    ],
+    "child_tags": [],
+    "connection_count": 2,
+    "created_at": "2025-08-25T05:45:32.862Z",
+    "updated_at": "2025-08-25T05:45:32.863Z",
+    "connections": [
+      "3eea5479-c03b-4a10-8fcf-d09031575dc7",
+      "3aea27fb-0554-45c9-b515-5d8f3b8b0bfd"
+    ]
+  },
+  {
+    "_id": "1dbe3cea-d767-43a2-be00-16fa26f17029",
+    "name": "新范式人工智能",
+    "description": "暂无简介",
+    "color": "#10B981",
+    "parent_tags": [],
+    "child_tags": [],
+    "connection_count": 1,
+    "created_at": "2025-08-25T05:45:32.863Z",
+    "updated_at": "2025-08-25T05:45:32.863Z",
+    "connections": [
+      "08067386-245a-4f13-8039-047fba20e73d"
+    ]
+  },
+  {
+    "_id": "1e8f3abd-dd97-472d-bf2d-c8fd68df8a7a",
+    "name": "北京迈达斯技术有限公司",
+    "description": "专业的建筑软件SaaS服务提供商，为建筑行业提供先进的技术解决方案。",
+    "color": "#F59E0B",
+    "parent_tags": [],
+    "child_tags": [],
+    "connection_count": 1,
+    "created_at": "2025-08-25T05:45:32.863Z",
+    "updated_at": "2025-08-25T05:45:32.863Z",
+    "connections": [
+      "07c92b5e-a431-42f6-a6a2-06c2e2124a3c"
+    ]
+  },
+  {
+    "_id": "a724edc4-e98c-4548-9392-fa0bbd473165",
+    "name": "杭州北冥星眸科技有限公司",
+    "description": "专注于AI技术和数据服务的科技公司。",
+    "color": "#EF4444",
+    "parent_tags": [],
+    "child_tags": [],
+    "connection_count": 1,
+    "created_at": "2025-08-25T05:45:32.863Z",
+    "updated_at": "2025-08-25T05:45:32.863Z",
+    "connections": [
+      "614a74dd-7372-4abb-8cf7-d7b619b049c6"
+    ]
+  },
+  {
+    "_id": "67871e19-ddd2-45a0-a009-3cfe9a8b2e73",
+    "name": "腾讯",
+    "description": "中国领先的互联网科技公司，提供社交、游戏、云计算等多元化服务。",
+    "color": "#8B5CF6",
+    "parent_tags": [],
+    "child_tags": [],
+    "connection_count": 4,
+    "created_at": "2025-08-25T05:45:32.863Z",
+    "updated_at": "2025-08-25T05:45:32.863Z",
+    "connections": [
+      "f153bd80-9a45-459b-89c1-779b66c8ce30",
+      "95d543b8-487b-487b-98a1-d22b21106883",
+      "f198ef63-4dbf-4919-91aa-294216d1627e",
+      "c9802250-925f-43a2-9f73-56d21fe1e228"
+    ]
+  },
+  {
+    "_id": "f2e76f1d-11b1-45f4-b01b-2dacccc30267",
+    "name": "OPPO",
+    "description": "全球领先的智能手机和智能设备制造商，专注于手机AI产品开发。",
+    "color": "#06B6D4",
+    "parent_tags": [],
+    "child_tags": [],
+    "connection_count": 1,
+    "created_at": "2025-08-25T05:45:32.863Z",
+    "updated_at": "2025-08-25T05:45:32.863Z",
+    "connections": [
+      "95d543b8-487b-487b-98a1-d22b21106883"
+    ]
+  },
+  {
+    "_id": "bb7737c8-6126-4409-a05c-b1e95598fbce",
+    "name": "阿里巴巴",
+    "description": "中国最大的电子商务和云计算公司，业务涵盖电商、金融、物流等领域。",
+    "color": "#F97316",
+    "parent_tags": [],
+    "child_tags": [],
+    "connection_count": 1,
+    "created_at": "2025-08-25T05:45:32.863Z",
+    "updated_at": "2025-08-25T05:45:32.863Z",
+    "connections": [
+      "95d543b8-487b-487b-98a1-d22b21106883"
+    ]
+  },
+  {
+    "_id": "7cb8fac6-5db1-4099-b4f8-e1dd61f727f8",
+    "name": "AstraCore量子星辰",
+    "description": "专注于量子计算和先进技术研发的创新科技公司。",
+    "color": "#84CC16",
+    "parent_tags": [],
+    "child_tags": [],
+    "connection_count": 1,
+    "created_at": "2025-08-25T05:45:32.863Z",
+    "updated_at": "2025-08-25T05:45:32.863Z",
+    "connections": [
+      "0fe3c975-bac6-45e7-8ca8-2ada2e409bb2"
+    ]
+  },
+  {
+    "_id": "c58bc182-5732-4ae5-a3a8-c770ef057f4d",
+    "name": "字节跳动",
+    "description": "全球化的移动互联网公司，旗下拥有抖音、今日头条等知名产品。",
+    "color": "#EC4899",
+    "parent_tags": [],
+    "child_tags": [],
+    "connection_count": 1,
+    "created_at": "2025-08-25T05:45:32.863Z",
+    "updated_at": "2025-08-25T05:45:32.863Z",
+    "connections": [
+      "c9802250-925f-43a2-9f73-56d21fe1e228"
+    ]
+  },
+  {
+    "_id": "f143b00f-a36b-494d-967f-42979a67bce0",
+    "name": "LDR tech",
+    "description": "专业的金融科技公司，专注于风控算法和金融技术解决方案。",
+    "color": "#6366F1",
+    "parent_tags": [],
+    "child_tags": [],
+    "connection_count": 1,
+    "created_at": "2025-08-25T05:45:32.863Z",
+    "updated_at": "2025-08-25T05:45:32.863Z",
+    "connections": [
+      "c4544e55-0f04-4e2d-a2d0-c1eb2908554c"
+    ]
+  },
+  {
+    "_id": "7b391317-8329-4c0b-9218-826560e9a1fc",
+    "name": "周周黑客松",
+    "description": "HackathonWeekly周周黑客松是一个AI产品创造者社区，致力于帮助创造者从0到1实现最小可行产品（MVP），快速找到他们的前100 个用户，一起享受创造的乐趣。",
+    "color": "#14B8A6",
+    "parent_tags": [],
+    "child_tags": [],
+    "connection_count": 21,
+    "created_at": "2025-08-25T05:45:32.864Z",
+    "updated_at": "2025-08-25T05:45:32.864Z",
+    "connections": [
+      "9c3fd701-2bc4-4816-9120-c13f2ed026c5",
+      "3eea5479-c03b-4a10-8fcf-d09031575dc7",
+      "f92c1aa1-9efd-4bfd-8a05-0b475826190a",
+      "c84f988b-7977-4978-b4c0-be79e3dd4e01",
+      "f4909449-d6cd-4c50-a35f-b0b3a3b15b44",
+      "33d7d020-2be4-46f7-a0f2-256f08b2ec34",
+      "08067386-245a-4f13-8039-047fba20e73d",
+      "de302d89-a1bb-4889-8cd1-04b20b677f04",
+      "6eea7d23-df63-44da-a4bb-88fcd905b403",
+      "768505da-f40e-4e91-b68d-5c4eaaaff4ae",
+      "ff3a883d-43a6-43ef-89ea-2dcf9c20f268",
+      "a75b8168-4172-426b-86d1-7cc9c280d985",
+      "c692367f-a083-40c6-b146-7f18ef47e28e",
+      "24b62b3e-35b1-4900-b7c3-ad4d100e5f6c",
+      "5fd7778f-1c8b-4ee1-899c-e1eda59ea82c",
+      "76775ab8-e021-4d87-9e7a-5cdb0106f348",
+      "8a275f0c-28b0-4d78-bb79-d35e1b57d802",
+      "2679a495-8eb9-46b4-a780-fe4b874fe048",
+      "a3c35748-291e-4256-abb1-67af6cdf0992",
+      "3fbdbd1a-aa01-4d35-a720-b6d1f7ad933b",
+      "3b2e4099-e5c5-4850-a78e-e818b7fa05bd"
+    ]
+  },
+  {
+    "_id": "27228510-b48e-41a0-b301-5490a8af3feb",
+    "name": "706深圳",
+    "description": "暂无简介",
+    "color": "#F472B6",
+    "parent_tags": [],
+    "child_tags": [],
+    "connection_count": 1,
+    "created_at": "2025-08-25T05:45:32.864Z",
+    "updated_at": "2025-08-25T05:45:32.864Z",
+    "connections": [
+      "33d7d020-2be4-46f7-a0f2-256f08b2ec34"
+    ]
+  },
+  {
+    "_id": "888441f7-c774-4a64-8ae2-af3ba58ce957",
+    "name": "奇绩创坛",
+    "description": "奇绩创坛是一个专注于前沿技术领域的创业加速平台，每年投资两次，为初创公司提供30万美元的股权投资，以及合伙人指导、社区交流、路演日等多项服务。",
+    "color": "#A855F7",
+    "parent_tags": [],
+    "child_tags": [
+      {
+        "_id": "551b3a56-e22d-4c62-b624-14427a7d79e4",
+        "name": "熵增力场"
+      }
+    ],
+    "connection_count": 1,
+    "created_at": "2025-08-25T05:45:32.864Z",
+    "updated_at": "2025-08-25T05:45:32.864Z",
+    "connections": [
+      "2679a495-8eb9-46b4-a780-fe4b874fe048"
+      
+    ]
+  },
+  {
+    "_id": "a45c8c36-90e2-4749-8ae8-683b8c51e4b7",
+    "name": "respitelab",
+    "description": "创新技术实验室，专注于前沿技术探索和产品开发。",
+    "color": "#22C55E",
+    "parent_tags": [],
+    "child_tags": [],
+    "connection_count": 1,
+    "created_at": "2025-08-25T05:45:32.864Z",
+    "updated_at": "2025-08-25T05:45:32.864Z",
+    "connections": [
+      "0fe3c975-bac6-45e7-8ca8-2ada2e409bb2"
+    ]
+  },
+  {
+    "_id": "0755e6d3-75c2-4f27-9db5-97588b4513fd",
+    "name": "program of lengend",
+    "description": "传奇编程项目组织，致力于培养优秀的程序员。",
+    "color": "#FB923C",
+    "parent_tags": [],
+    "child_tags": [],
+    "connection_count": 1,
+    "created_at": "2025-08-25T05:45:32.864Z",
+    "updated_at": "2025-08-25T05:45:32.864Z",
+    "connections": [
+      "0fe3c975-bac6-45e7-8ca8-2ada2e409bb2"
+    ]
+  },
+  {
+    "_id": "92e1c53b-fcc1-434e-91e5-4b1b0873a2ba",
+    "name": "Startup Grind广州",
+    "description": "Startup Grind是全球最大的创业社区，广州分部致力于连接本地创业者和投资人。",
+    "color": "#64748B",
+    "parent_tags": [],
+    "child_tags": [],
+    "connection_count": 1,
+    "created_at": "2025-08-25T05:45:32.864Z",
+    "updated_at": "2025-08-25T05:45:32.864Z",
+    "connections": [
+      "31602bc1-5cb5-412e-b652-e24a7c2c4da0"
+    ]
+  },
+  {
+    "_id": "9b772be5-c29e-47fd-9d2f-8082af3487a4",
+    "name": "deepractive",
+    "description": "专注于深度学习和AI技术研发的技术团队。",
+    "color": "#DC2626",
+    "parent_tags": [],
+    "child_tags": [],
+    "connection_count": 1,
+    "created_at": "2025-08-25T05:45:32.864Z",
+    "updated_at": "2025-08-25T05:45:32.864Z",
+    "connections": [
+      "6300df2c-8936-4147-b5f4-83b2288b1a45"
+    ]
+  },
+  {
+    "_id": "930d39d4-35da-46fa-ab4b-fb07e29d3ef1",
+    "name": "SecureNexusLab",
+    "description": "专注于网络安全研究的实验室，致力于IoT安全和漏洞研究。",
+    "color": "#7C3AED",
+    "parent_tags": [],
+    "child_tags": [],
+    "connection_count": 1,
+    "created_at": "2025-08-25T05:45:32.864Z",
+    "updated_at": "2025-08-25T05:45:32.864Z",
+    "connections": [
+      "f198ef63-4dbf-4919-91aa-294216d1627e"
+    ]
+  },
+  {
+    "_id": "597e4c1b-13fd-480f-aefb-e9262c1a9ce6",
+    "name": "LynxAl",
+    "description": "专注于AI Agent技术的研发组织。",
+    "color": "#059669",
+    "parent_tags": [],
+    "child_tags": [],
+    "connection_count": 1,
+    "created_at": "2025-08-25T05:45:32.864Z",
+    "updated_at": "2025-08-25T05:45:32.864Z",
+    "connections": [
+      "b149a921-6efe-4606-9530-4e2c1ce9be33"
+    ]
+  },
+  {
+    "_id": "5a597819-840a-42d8-9f84-2d2a7dd30e5d",
+    "name": "AgentVC",
+    "description": "专注于AI Agent和风险投资的组织。",
+    "color": "#D97706",
+    "parent_tags": [],
+    "child_tags": [],
+    "connection_count": 1,
+    "created_at": "2025-08-25T05:45:32.864Z",
+    "updated_at": "2025-08-25T05:45:32.864Z",
+    "connections": [
+      "b149a921-6efe-4606-9530-4e2c1ce9be33"
+    ]
+  },
+  {
+    "_id": "512d1aca-8bd0-4c0a-9784-daca188bb162",
+    "name": "TRAE-SOLO-Hackathon",
+    "description": "自动生成的标签: TRAE-SOLO-Hackathon",
+    "color": "#6B7280",
+    "parent_tags": [],
+    "child_tags": [],
+    "connection_count": 28,
+    "updated_at": "2025-08-25T07:34:12.158Z",
+    "connections": [
+      "9c3fd701-2bc4-4816-9120-c13f2ed026c5",
+      "3eea5479-c03b-4a10-8fcf-d09031575dc7",
+      "a3c35748-291e-4256-abb1-67af6cdf0992",
+      "3b2e4099-e5c5-4850-a78e-e818b7fa05bd",
+      "07c92b5e-a431-42f6-a6a2-06c2e2124a3c",
+      "614a74dd-7372-4abb-8cf7-d7b619b049c6",
+      "f153bd80-9a45-459b-89c1-779b66c8ce30",
+      "95d543b8-487b-487b-98a1-d22b21106883",
+      "0fe3c975-bac6-45e7-8ca8-2ada2e409bb2",
+      "08a98ca3-d899-4d82-bab4-f17e9cd806d0",
+      "02d33059-5ce0-498e-8992-adf0cf4c342a",
+      "31602bc1-5cb5-412e-b652-e24a7c2c4da0",
+      "f678324a-5181-4eea-9534-e2da8959856b",
+      "81e9a694-7749-4a4a-9b3c-bffc38d9e290",
+      "36d785d1-2984-4c5d-9aae-cec5655aab52",
+      "6300df2c-8936-4147-b5f4-83b2288b1a45",
+      "6d8e9286-68b4-459a-b42c-dcc95f909197",
+      "f198ef63-4dbf-4919-91aa-294216d1627e",
+      "09717e38-b07d-4ca3-ab8b-917ac3182a22",
+      "c9802250-925f-43a2-9f73-56d21fe1e228",
+      "6b02a7d5-7b0e-4341-9cda-2040a4993c6c",
+      "45386018-1b42-425f-aa06-c2407cc41ff4",
+      "30450c3e-4ee1-424a-8575-3321ba54c51e",
+      "c4544e55-0f04-4e2d-a2d0-c1eb2908554c",
+      "b149a921-6efe-4606-9530-4e2c1ce9be33",
+      "2c276251-f9fd-4ebe-b47a-100384e12429",
+      "2e875095-61a3-4854-8e81-e8ef4f8af8a0",
+      "ec8670ab-756e-459b-a628-463db4c6f9c9"
+    ]
+  },
+  {
+    "_id": "1f3f8255-73fb-4ed3-a91f-5a7e369b2b39",
+    "name": "ENFP",
+    "description": "自动生成的标签: ENFP",
+    "color": "#6B7280",
+    "parent_tags": [],
+    "child_tags": [],
+    "connection_count": 4,
+    "connections": [
+      "3eea5479-c03b-4a10-8fcf-d09031575dc7",
+      "f4909449-d6cd-4c50-a35f-b0b3a3b15b44",
+      "a75b8168-4172-426b-86d1-7cc9c280d985",
+      "3b2e4099-e5c5-4850-a78e-e818b7fa05bd"
+    ]
+  },
+  {
+    "_id": "ac8d9b3a-855b-4d9f-82f1-377fa06d401a",
+    "name": "全栈开发",
+    "description": "自动生成的标签: 全栈开发",
+    "color": "#6B7280",
+    "parent_tags": [],
+    "child_tags": [],
+    "connection_count": 1,
+    "connections": [
+      "0fe3c975-bac6-45e7-8ca8-2ada2e409bb2"
+    ]
+  },
+  {
+    "_id": "1fdd735a-4439-4d0d-b98d-300079b1f3cd",
+    "name": "Python",
+    "description": "自动生成的标签: Python",
+    "color": "#6B7280",
+    "parent_tags": [],
+    "child_tags": [],
+    "connection_count": 2,
+    "connections": [
+      "0fe3c975-bac6-45e7-8ca8-2ada2e409bb2",
+      "45386018-1b42-425f-aa06-c2407cc41ff4"
+    ]
+  },
+  {
+    "_id": "943b4eac-860f-46af-9181-09710bfdb1f3",
+    "name": "Vue",
+    "description": "自动生成的标签: Vue",
+    "color": "#6B7280",
+    "parent_tags": [],
+    "child_tags": [],
+    "connection_count": 1,
+    "connections": [
+      "0fe3c975-bac6-45e7-8ca8-2ada2e409bb2"
+    ]
+  },
+  {
+    "_id": "97623f5f-e666-4000-9684-c8cdf8b1c691",
+    "name": "C++",
+    "description": "自动生成的标签: C++",
+    "color": "#6B7280",
+    "parent_tags": [],
+    "child_tags": [],
+    "connection_count": 2,
+    "connections": [
+      "0fe3c975-bac6-45e7-8ca8-2ada2e409bb2",
+      "6b02a7d5-7b0e-4341-9cda-2040a4993c6c"
+    ]
+  },
+  {
+    "_id": "8fcb36a1-71b9-4681-892f-56de4f4f7b34",
+    "name": "AI",
+    "description": "自动生成的标签: AI",
+    "color": "#6B7280",
+    "parent_tags": [],
+    "child_tags": [],
+    "connection_count": 4,
+    "connections": [
+      "6b02a7d5-7b0e-4341-9cda-2040a4993c6c",
+      "c4544e55-0f04-4e2d-a2d0-c1eb2908554c",
+      "2c276251-f9fd-4ebe-b47a-100384e12429",
+      "ec8670ab-756e-459b-a628-463db4c6f9c9"
+    ]
+  },
+  {
+    "_id": "606bc076-1ead-422d-ac16-80749cd84712",
+    "name": "安全研究",
+    "description": "自动生成的标签: 安全研究",
+    "color": "#6B7280",
+    "parent_tags": [],
+    "child_tags": [],
+    "connection_count": 1,
+    "connections": [
+      "6b02a7d5-7b0e-4341-9cda-2040a4993c6c"
+    ]
+  },
+  {
+    "_id": "1d7cb744-68b4-4887-a0b6-6611207f1e73",
+    "name": "在校学生",
+    "description": "自动生成的标签: 在校学生",
+    "color": "#6B7280",
+    "parent_tags": [],
+    "child_tags": [],
+    "connection_count": 3,
+    "connections": [
+      "6b02a7d5-7b0e-4341-9cda-2040a4993c6c",
+      "45386018-1b42-425f-aa06-c2407cc41ff4",
+      "30450c3e-4ee1-424a-8575-3321ba54c51e"
+    ]
+  },
+  {
+    "_id": "bcdf23cb-db7c-42ff-8991-e284cb411522",
+    "name": "数据科学",
+    "description": "自动生成的标签: 数据科学",
+    "color": "#6B7280",
+    "parent_tags": [],
+    "child_tags": [],
+    "connection_count": 2,
+    "connections": [
+      "45386018-1b42-425f-aa06-c2407cc41ff4",
+      "2c276251-f9fd-4ebe-b47a-100384e12429"
+    ]
+  },
+  {
+    "_id": "714d0187-4986-4639-b6c9-5716c321ed3c",
+    "name": "TypeScript",
+    "description": "自动生成的标签: TypeScript",
+    "color": "#6B7280",
+    "parent_tags": [],
+    "child_tags": [],
+    "connection_count": 1,
+    "connections": [
+      "45386018-1b42-425f-aa06-c2407cc41ff4"
+    ]
+  },
+  {
+    "_id": "dc9e9e78-0381-4d2d-9577-9f2fe18e955a",
+    "name": "算法工程师",
+    "description": "自动生成的标签: 算法工程师",
+    "color": "#6B7280",
+    "parent_tags": [],
+    "child_tags": [],
+    "connection_count": 1,
+    "connections": [
+      "c4544e55-0f04-4e2d-a2d0-c1eb2908554c"
+    ]
+  },
+  {
+    "_id": "d3e0dacf-321f-44bc-8fd6-8fcfcc68d717",
+    "name": "设计师",
+    "description": "自动生成的标签: 设计师",
+    "color": "#6B7280",
+    "parent_tags": [],
+    "child_tags": [],
+    "connection_count": 1,
+    "connections": [
+      "ec8670ab-756e-459b-a628-463db4c6f9c9"
+    ]
+  }
+]
