@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CoderLink 启动器</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .launcher-container {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 60px 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            max-width: 500px;
+            width: 90%;
+        }
+
+        .logo {
+            font-size: 3.5rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #fff, #f0f0f0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            margin-bottom: 40px;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+
+        .launch-button {
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+            border: none;
+            color: white;
+            padding: 20px 50px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(76, 175, 80, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .launch-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(76, 175, 80, 0.4);
+            background: linear-gradient(45deg, #45a049, #4CAF50);
+        }
+
+        .launch-button:active {
+            transform: translateY(-1px);
+        }
+
+        .launch-button.loading {
+            background: linear-gradient(45deg, #ff9800, #f57c00);
+            cursor: not-allowed;
+        }
+
+        .launch-button.success {
+            background: linear-gradient(45deg, #2196F3, #1976D2);
+        }
+
+        .status-message {
+            margin-top: 30px;
+            font-size: 1.1rem;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .status-message.show {
+            opacity: 1;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 10px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .features {
+            margin-top: 40px;
+            text-align: left;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            font-size: 1rem;
+            opacity: 0.8;
+        }
+
+        .feature-icon {
+            width: 20px;
+            height: 20px;
+            margin-right: 15px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+        }
+
+        .instructions {
+            margin-top: 30px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            font-size: 0.9rem;
+            opacity: 0.8;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 600px) {
+            .launcher-container {
+                padding: 40px 20px;
+            }
+            
+            .logo {
+                font-size: 2.5rem;
+            }
+            
+            .launch-button {
+                padding: 15px 30px;
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="launcher-container">
+        <div class="logo">🔗 CoderLink</div>
+        <div class="subtitle">智能联系人管理系统</div>
+        
+        <button class="launch-button" id="launchBtn" onclick="launchApp()">
+            启动 CoderLink
+        </button>
+        
+        <div class="status-message" id="statusMessage"></div>
+        
+        <div class="features">
+            <div class="feature-item">
+                <div class="feature-icon">📊</div>
+                <span>知识图谱可视化</span>
+            </div>
+            <div class="feature-item">
+                <div class="feature-icon">🏷️</div>
+                <span>智能标签管理</span>
+            </div>
+            <div class="feature-item">
+                <div class="feature-icon">🔍</div>
+                <span>多维关系分析</span>
+            </div>
+            <div class="feature-item">
+                <div class="feature-icon">📱</div>
+                <span>响应式设计</span>
+            </div>
+        </div>
+        
+        <div class="instructions">
+            <strong>使用说明：</strong><br>
+            1. 点击上方按钮启动CoderLink<br>
+            2. 系统将自动启动本地服务器<br>
+            3. 浏览器会自动打开应用界面<br>
+            4. 按Ctrl+C可停止服务器
+        </div>
+    </div>
+
+    <script>
+        let isLaunching = false;
+
+        function showStatus(message, type = 'info') {
+            const statusEl = document.getElementById('statusMessage');
+            statusEl.textContent = message;
+            statusEl.className = `status-message show ${type}`;
+        }
+
+        function hideStatus() {
+            const statusEl = document.getElementById('statusMessage');
+            statusEl.className = 'status-message';
+        }
+
+        async function launchApp() {
+            if (isLaunching) return;
+            
+            isLaunching = true;
+            const btn = document.getElementById('launchBtn');
+            
+            // 更新按钮状态
+            btn.className = 'launch-button loading';
+            btn.innerHTML = '<span class="spinner"></span>正在启动...';
+            
+            showStatus('🚀 正在启动CoderLink服务器...', 'loading');
+            
+            try {
+                // 尝试启动Python脚本
+                const response = await fetch('/launch', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                if (response.ok) {
+                    btn.className = 'launch-button success';
+                    btn.innerHTML = '✅ 启动成功';
+                    showStatus('🎉 CoderLink已成功启动！浏览器将自动打开...', 'success');
+                    
+                    // 延迟后打开应用
+                    setTimeout(() => {
+                        window.open('http://localhost:8000', '_blank');
+                    }, 2000);
+                } else {
+                    throw new Error('启动失败');
+                }
+            } catch (error) {
+                // 如果API调用失败，尝试直接运行Python脚本
+                showStatus('🔄 正在尝试直接启动...', 'loading');
+                
+                try {
+                    // 创建一个隐藏的iframe来执行Python脚本
+                    const iframe = document.createElement('iframe');
+                    iframe.style.display = 'none';
+                    iframe.src = 'data:text/html,<script>window.location.href="launcher.py"</script>';
+                    document.body.appendChild(iframe);
+                    
+                    btn.className = 'launch-button success';
+                    btn.innerHTML = '✅ 请查看终端';
+                    showStatus('💡 请在终端中运行: python launcher.py', 'info');
+                } catch (fallbackError) {
+                    btn.className = 'launch-button';
+                    btn.innerHTML = '启动 CoderLink';
+                    showStatus('❌ 自动启动失败，请手动运行: python launcher.py', 'error');
+                }
+            }
+            
+            // 重置状态
+            setTimeout(() => {
+                if (btn.innerHTML !== '✅ 启动成功') {
+                    btn.className = 'launch-button';
+                    btn.innerHTML = '启动 CoderLink';
+                    isLaunching = false;
+                }
+            }, 5000);
+        }
+
+        // 页面加载完成后的初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 检查是否已经有服务器在运行
+            fetch('http://localhost:8000')
+                .then(response => {
+                    if (response.ok) {
+                        showStatus('✅ 检测到CoderLink已在运行中', 'success');
+                        const btn = document.getElementById('launchBtn');
+                        btn.innerHTML = '🌐 打开应用';
+                        btn.onclick = () => window.open('http://localhost:8000', '_blank');
+                    }
+                })
+                .catch(() => {
+                    // 服务器未运行，显示正常启动按钮
+                });
+        });
+
+        // 添加键盘快捷键
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                launchApp();
+            }
+        });
+    </script>
+</body>
+</html>

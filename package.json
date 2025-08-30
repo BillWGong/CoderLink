@@ -1,7 +1,7 @@
 {
-  "name": "contacts-management",
+  "name": "CoderLink",
   "version": "1.0.0",
-  "description": "联系人和工作单位管理系统",
+  "description": "CoderLink - 智能联系人管理系统",
   "main": "src/server.js",
   "scripts": {
     "start": "node src/server.js",
