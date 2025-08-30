@@ -1,0 +1,687 @@
+/**
+ * AI卡片式搜索组件样式
+ */
+
+/* 搜索结果卡片容器 */
+.search-results-cards {
+  padding: 20px;
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+/* 卡片区域 */
+.cards-section {
+  margin-bottom: 30px;
+}
+
+.cards-section:last-child {
+  margin-bottom: 0;
+}
+
+/* 区域标题 */
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-normal);
+  margin-bottom: 16px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--background-modifier-border);
+}
+
+.section-title i {
+  color: var(--text-accent);
+}
+
+/* 卡片网格布局 */
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+/* 基础卡片样式 */
+.card-item {
+  background: var(--background-primary);
+  border: 1px solid var(--background-modifier-border);
+  border-radius: 12px;
+  padding: 16px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.card-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(123, 104, 238, 0.2);
+  border-color: var(--text-accent);
+}
+
+.card-item:active {
+  transform: translateY(0);
+}
+
+/* 卡片头部 */
+.card-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.card-avatar,
+.card-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--background-modifier-border);
+  flex-shrink: 0;
+}
+
+.card-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.card-name {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-normal);
+  margin: 0 0 4px 0;
+  line-height: 1.3;
+  word-wrap: break-word;
+}
+
+.card-title,
+.card-company,
+.card-category {
+  font-size: 14px;
+  color: var(--text-muted);
+  margin: 0 0 2px 0;
+  line-height: 1.2;
+}
+
+.card-category {
+  display: inline-block;
+  background: var(--background-modifier-hover);
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.card-description {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin: 8px 0 0 0;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* 卡片主体 */
+.card-body {
+  margin-top: 12px;
+}
+
+/* 标签样式 */
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.card-tag {
+  background: linear-gradient(135deg, var(--text-accent), #9b59b6);
+  color: white;
+  padding: 3px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.card-tag-more {
+  background: var(--background-modifier-hover);
+  color: var(--text-muted);
+  padding: 3px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+/* 联系方式样式 */
+.card-contact {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.contact-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--text-muted);
+  padding: 4px 8px;
+  background: var(--background-modifier-hover);
+  border-radius: 6px;
+}
+
+.contact-item i {
+  color: var(--text-accent);
+  width: 14px;
+  text-align: center;
+}
+
+/* 关系图跳转按钮 */
+.map-jump-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: linear-gradient(135deg, var(--text-accent), #9b59b6);
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-bottom: 12px;
+}
+
+.map-jump-btn:hover {
+  background: linear-gradient(135deg, #9b59b6, var(--text-accent));
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(123, 104, 238, 0.3);
+}
+
+.map-jump-btn:active {
+  transform: translateY(0);
+}
+
+/* 相关人员区域 */
+.related-persons {
+  border-top: 1px solid var(--background-modifier-border);
+  padding-top: 12px;
+}
+
+.related-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-normal);
+  margin: 0 0 10px 0;
+}
+
+.related-title i {
+  color: var(--text-accent);
+}
+
+.persons-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* 迷你人员卡片 */
+.mini-person-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px;
+  background: var(--background-modifier-hover);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.mini-person-card:hover {
+  background: var(--background-modifier-border);
+  transform: translateX(4px);
+}
+
+.mini-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid var(--background-modifier-border);
+}
+
+.mini-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.mini-name {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-normal);
+  line-height: 1.2;
+  word-wrap: break-word;
+}
+
+.mini-title {
+  display: block;
+  font-size: 11px;
+  color: var(--text-muted);
+  line-height: 1.2;
+}
+
+.mini-person-more {
+  text-align: center;
+  padding: 8px;
+  color: var(--text-muted);
+  font-size: 12px;
+  font-style: italic;
+}
+
+/* 空结果样式 */
+.empty-result {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 300px;
+  padding: 40px 20px;
+}
+
+.empty-content {
+  text-align: center;
+  max-width: 400px;
+}
+
+.empty-icon {
+  font-size: 48px;
+  color: var(--text-muted);
+  margin-bottom: 16px;
+  opacity: 0.6;
+}
+
+.empty-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text-normal);
+  margin: 0 0 8px 0;
+}
+
+.empty-message {
+  font-size: 16px;
+  color: var(--text-muted);
+  margin: 0 0 20px 0;
+  line-height: 1.5;
+}
+
+.empty-suggestions {
+  text-align: left;
+  background: var(--background-modifier-hover);
+  padding: 16px;
+  border-radius: 8px;
+  border-left: 4px solid var(--text-accent);
+}
+
+.empty-suggestions p {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-normal);
+  margin: 0 0 8px 0;
+}
+
+.empty-suggestions ul {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.empty-suggestions li {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+  line-height: 1.4;
+}
+
+/* Toast 提示样式 */
+.toast {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: var(--background-primary);
+  border: 1px solid var(--background-modifier-border);
+  border-radius: 8px;
+  padding: 12px 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 10000;
+  animation: slideInRight 0.3s ease;
+}
+
+.toast-info {
+  border-left: 4px solid #2196F3;
+}
+
+.toast-success {
+  border-left: 4px solid #4CAF50;
+}
+
+.toast-warning {
+  border-left: 4px solid #FF9800;
+}
+
+.toast-content {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: var(--text-normal);
+}
+
+.toast-content i {
+  color: var(--text-accent);
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .cards-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  
+  .search-results-cards {
+    padding: 16px;
+  }
+  
+  .card-item {
+    padding: 12px;
+  }
+  
+  .card-header {
+    gap: 10px;
+  }
+  
+  .card-avatar,
+  .card-icon {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .card-name {
+    font-size: 15px;
+  }
+  
+  .section-title {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .cards-grid {
+    gap: 8px;
+  }
+  
+  .search-results-cards {
+    padding: 12px;
+  }
+  
+  .card-item {
+    padding: 10px;
+  }
+  
+  .empty-result {
+    min-height: 200px;
+    padding: 20px 10px;
+  }
+  
+  .empty-icon {
+    font-size: 36px;
+  }
+  
+  .empty-title {
+    font-size: 18px;
+  }
+  
+  .empty-message {
+    font-size: 14px;
+  }
+}
+
+/* 地图模态框样式 */
+.map-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+  animation: fadeIn 0.3s ease;
+}
+
+.map-modal-content {
+  background: var(--background-primary);
+  border-radius: 12px;
+  width: 90%;
+  max-width: 500px;
+  max-height: 80vh;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  animation: slideUp 0.3s ease;
+}
+
+.map-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  border-bottom: 1px solid var(--background-modifier-border);
+  background: linear-gradient(135deg, var(--text-accent), #9b59b6);
+  color: white;
+}
+
+.map-modal-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.map-modal-close {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 18px;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.map-modal-close:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.map-modal-body {
+  padding: 20px;
+}
+
+.location-info {
+  margin-bottom: 20px;
+}
+
+.location-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 0;
+  font-size: 14px;
+  color: var(--text-normal);
+}
+
+.location-item i {
+  color: var(--text-accent);
+  width: 16px;
+  text-align: center;
+}
+
+.map-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.map-action-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--background-modifier-hover);
+  border: 1px solid var(--background-modifier-border);
+  color: var(--text-normal);
+  padding: 12px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 14px;
+  text-decoration: none;
+}
+
+.map-action-btn:hover {
+  background: var(--background-modifier-border);
+  border-color: var(--text-accent);
+  transform: translateY(-1px);
+}
+
+.map-action-btn i {
+  color: var(--text-accent);
+  width: 16px;
+  text-align: center;
+}
+
+.map-placeholder {
+  text-align: center;
+  padding: 30px 20px;
+  background: var(--background-modifier-hover);
+  border-radius: 8px;
+  border: 2px dashed var(--background-modifier-border);
+}
+
+.map-placeholder i {
+  font-size: 48px;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+  opacity: 0.6;
+}
+
+.map-placeholder p {
+  font-size: 16px;
+  color: var(--text-normal);
+  margin: 0 0 8px 0;
+  font-weight: 500;
+}
+
+.map-placeholder small {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* 地图模态框响应式设计 */
+@media (max-width: 768px) {
+  .map-modal-content {
+    width: 95%;
+    margin: 20px;
+  }
+  
+  .map-modal-header {
+    padding: 16px;
+  }
+  
+  .map-modal-title {
+    font-size: 16px;
+  }
+  
+  .map-modal-body {
+    padding: 16px;
+  }
+  
+  .map-placeholder {
+    padding: 20px 16px;
+  }
+  
+  .map-placeholder i {
+    font-size: 36px;
+  }
+}
+
+/* Toast 警告样式 */
+.toast-warning {
+  border-left: 4px solid #FF9800;
+}
+
+/* 深色主题适配 */
+@media (prefers-color-scheme: dark) {
+  .card-item {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  }
+  
+  .card-item:hover {
+    box-shadow: 0 4px 16px rgba(123, 104, 238, 0.4);
+  }
+  
+  .toast {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  }
+  
+  .map-modal {
+    background: rgba(0, 0, 0, 0.8);
+  }
+  
+  .map-modal-content {
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+  }
+}

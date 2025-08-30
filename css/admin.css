@@ -1,0 +1,493 @@
+/* 管理员面板样式 */
+
+/* 管理员面板基础样式 */
+.admin-panel {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1001;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.admin-panel.hidden {
+  display: none;
+}
+
+.admin-panel-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+}
+
+.admin-panel-content {
+  position: relative;
+  width: 95%;
+  max-width: 1200px;
+  max-height: 95%;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px;
+  background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+  color: white;
+}
+
+.admin-panel-header h2 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.admin-panel-nav {
+  display: flex;
+  background: #f8f9fa;
+  border-bottom: 1px solid #dee2e6;
+  overflow-x: auto;
+}
+
+.admin-panel-nav .nav-btn {
+  flex: 1;
+  min-width: 120px;
+  padding: 14px 16px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  color: #6c757d;
+  transition: all 0.2s ease;
+  border-bottom: 3px solid transparent;
+  white-space: nowrap;
+}
+
+.admin-panel-nav .nav-btn:hover {
+  background: #e9ecef;
+  color: #495057;
+}
+
+.admin-panel-nav .nav-btn.active {
+  color: #e74c3c;
+  border-bottom-color: #e74c3c;
+  background: white;
+}
+
+.admin-panel-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+}
+
+/* 待审核申请样式 */
+.pending-header,
+.requests-header,
+.users-header,
+.stats-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.pending-header h3,
+.requests-header h3,
+.users-header h3,
+.stats-header h3 {
+  margin: 0;
+  color: #333;
+  font-size: 20px;
+}
+
+.batch-actions,
+.filter-controls,
+.user-controls {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.batch-actions button,
+.filter-controls button,
+.user-controls button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.batch-actions button:first-child {
+  background: #28a745;
+  color: white;
+}
+
+.batch-actions button:first-child:hover {
+  background: #1e7e34;
+}
+
+.batch-actions button:nth-child(2) {
+  background: #dc3545;
+  color: white;
+}
+
+.batch-actions button:nth-child(2):hover {
+  background: #c82333;
+}
+
+.batch-actions button:last-child,
+.filter-controls button,
+.user-controls button {
+  background: #007bff;
+  color: white;
+}
+
+.batch-actions button:last-child:hover,
+.filter-controls button:hover,
+.user-controls button:hover {
+  background: #0056b3;
+}
+
+.filter-controls select,
+.user-controls select,
+.user-controls input {
+  padding: 8px 12px;
+  border: 1px solid #ced4da;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.user-controls input {
+  min-width: 200px;
+}
+
+/* 申请列表样式 */
+.requests-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.request-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px;
+  background: white;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease;
+}
+
+.request-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.request-item.status-approved {
+  border-left: 4px solid #28a745;
+  background: #f8fff9;
+}
+
+.request-item.status-rejected {
+  border-left: 4px solid #dc3545;
+  background: #fff8f8;
+}
+
+.request-checkbox {
+  display: flex;
+  align-items: center;
+}
+
+.request-select {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
+.request-info {
+  flex: 1;
+}
+
+.request-info h4 {
+  margin: 0 0 8px 0;
+  color: #333;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.request-info p {
+  margin: 4px 0;
+  color: #6c757d;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.request-info .applicant {
+  font-weight: 500;
+  color: #495057;
+}
+
+.request-info .reason {
+  font-style: italic;
+  background: #f8f9fa;
+  padding: 8px;
+  border-radius: 4px;
+  border-left: 3px solid #007bff;
+}
+
+.request-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.approve-btn,
+.reject-btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.approve-btn {
+  background: #28a745;
+  color: white;
+}
+
+.approve-btn:hover {
+  background: #1e7e34;
+  transform: translateY(-1px);
+}
+
+.reject-btn {
+  background: #dc3545;
+  color: white;
+}
+
+.reject-btn:hover {
+  background: #c82333;
+  transform: translateY(-1px);
+}
+
+/* 用户列表样式 */
+.users-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 16px;
+}
+
+.user-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px;
+  background: white;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease;
+}
+
+.user-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.user-avatar img {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: 2px solid #dee2e6;
+  object-fit: cover;
+}
+
+.user-info {
+  flex: 1;
+}
+
+.user-info h4 {
+  margin: 0 0 8px 0;
+  color: #333;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.user-info p {
+  margin: 2px 0;
+  color: #6c757d;
+  font-size: 13px;
+}
+
+.user-role select {
+  padding: 6px 10px;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+/* 系统统计样式 */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.stat-card {
+  padding: 24px;
+  background: white;
+  border: 1px solid #dee2e6;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.stat-card h4 {
+  margin: 0 0 16px 0;
+  color: #333;
+  font-size: 18px;
+  font-weight: 600;
+  border-bottom: 2px solid #007bff;
+  padding-bottom: 8px;
+}
+
+.stat-card p {
+  margin: 8px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #495057;
+  font-size: 14px;
+}
+
+.stat-card p:last-child {
+  margin-bottom: 0;
+}
+
+/* 状态指示器 */
+.status-indicator {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 8px;
+}
+
+.status-indicator.pending {
+  background: #ffc107;
+}
+
+.status-indicator.approved {
+  background: #28a745;
+}
+
+.status-indicator.rejected {
+  background: #dc3545;
+}
+
+/* 响应式设计 */
+@media (max-width: 1024px) {
+  .admin-panel-content {
+    width: 98%;
+  }
+  
+  .users-list {
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  }
+  
+  .stats-grid {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .admin-panel-nav {
+    flex-wrap: wrap;
+  }
+  
+  .admin-panel-nav .nav-btn {
+    flex: 1 1 50%;
+  }
+  
+  .pending-header,
+  .requests-header,
+  .users-header,
+  .stats-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .batch-actions,
+  .filter-controls,
+  .user-controls {
+    width: 100%;
+    justify-content: flex-start;
+  }
+  
+  .request-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .request-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+  
+  .users-list {
+    grid-template-columns: 1fr;
+  }
+  
+  .user-item {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .admin-panel-content {
+    width: 100%;
+    height: 100%;
+    border-radius: 0;
+  }
+  
+  .admin-panel-nav .nav-btn {
+    flex: 1 1 100%;
+  }
+  
+  .user-controls input {
+    min-width: 150px;
+  }
+}

@@ -11,16 +11,14 @@ import subprocess
 import webbrowser
 import time
 import threading
-from http.server import HTTPServer, SimpleHTTPRequestHandler
-import socketserver
+import signal
 
 class CoderLinkLauncher:
     def __init__(self):
-        self.port = 8000
-        self.server = None
-        self.server_thread = None
+        self.port = 5000
+        self.node_process = None
         
-    def find_available_port(self, start_port=8000):
+    def find_available_port(self, start_port=5000):
         """查找可用端口"""
         import socket
         for port in range(start_port, start_port + 100):
@@ -33,46 +31,48 @@ class CoderLinkLauncher:
         return None
     
     def start_server(self):
-        """启动HTTP服务器"""
+        """启动Node.js服务器"""
         try:
-            # 查找可用端口
-            self.port = self.find_available_port()
-            if not self.port:
-                print("❌ 无法找到可用端口")
-                return False
-                
             # 切换到项目目录
-            os.chdir(os.path.dirname(os.path.abspath(__file__)))
+            project_dir = os.path.dirname(os.path.abspath(__file__))
+            os.chdir(project_dir)
             
-            # 创建自定义处理器
-            class CustomHandler(SimpleHTTPRequestHandler):
-                def end_headers(self):
-                    self.send_header('Cache-Control', 'no-cache, no-store, must-revalidate')
-                    self.send_header('Pragma', 'no-cache')
-                    self.send_header('Expires', '0')
-                    super().end_headers()
-                    
-                def log_message(self, format, *args):
-                    # 简化日志输出
-                    print(f"📡 {args[0]} - {args[1]}")
+            # 检查Node.js是否可用
+            try:
+                subprocess.run(['node', '--version'], check=True, capture_output=True)
+            except (subprocess.CalledProcessError, FileNotFoundError):
+                print("❌ Node.js 未安装或不可用")
+                return False
             
-            # 启动服务器
-            self.server = HTTPServer(('localhost', self.port), CustomHandler)
+            # 设置环境变量
+            env = os.environ.copy()
+            env['PORT'] = str(self.port)
             
-            def run_server():
-                print(f"🚀 CoderLink 服务器启动成功!")
-                print(f"📍 访问地址: http://localhost:{self.port}")
-                print(f"🌐 正在自动打开浏览器...")
-                print(f"⏹️  按 Ctrl+C 停止服务器")
-                print("-" * 50)
-                self.server.serve_forever()
-            
-            # 在新线程中运行服务器
-            self.server_thread = threading.Thread(target=run_server, daemon=True)
-            self.server_thread.start()
+            # 启动Node.js服务器
+            print(f"🚀 正在启动 CoderLink Node.js 服务器...")
+            self.node_process = subprocess.Popen(
+                ['node', 'src/server.js'],
+                cwd=project_dir,
+                env=env,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.STDOUT,
+                universal_newlines=True,
+                bufsize=1
+            )
             
             # 等待服务器启动
-            time.sleep(1)
+            time.sleep(3)
+            
+            # 检查进程是否还在运行
+            if self.node_process.poll() is not None:
+                print("❌ Node.js 服务器启动失败")
+                return False
+            
+            print(f"🚀 CoderLink 服务器启动成功!")
+            print(f"📍 访问地址: http://localhost:{self.port}")
+            print(f"🌐 正在自动打开浏览器...")
+            print(f"⏹️  按 Ctrl+C 停止服务器")
+            print("-" * 50)
             
             # 自动打开浏览器
             webbrowser.open(f'http://localhost:{self.port}')
@@ -84,12 +84,25 @@ class CoderLinkLauncher:
             return False
     
     def stop_server(self):
-        """停止服务器"""
-        if self.server:
+        """停止Node.js服务器"""
+        if self.node_process:
             print("\n🛑 正在停止服务器...")
-            self.server.shutdown()
-            self.server.server_close()
-            print("✅ 服务器已停止")
+            try:
+                # 在Windows上终止进程
+                if os.name == 'nt':
+                    self.node_process.terminate()
+                else:
+                    self.node_process.send_signal(signal.SIGTERM)
+                
+                # 等待进程结束
+                self.node_process.wait(timeout=5)
+                print("✅ 服务器已停止")
+            except subprocess.TimeoutExpired:
+                print("⚠️ 强制终止服务器进程")
+                self.node_process.kill()
+                self.node_process.wait()
+            except Exception as e:
+                print(f"❌ 停止服务器时出错: {e}")
     
     def run(self):
         """运行启动器"""

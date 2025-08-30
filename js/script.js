@@ -1566,6 +1566,43 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     }
     
+    // 高亮显示指定名称的节点
+    function highlightNodeByName(nodeName) {
+      if (!graph || !graphData || !graphData.nodes) {
+        console.warn('图谱未初始化或数据不可用');
+        return;
+      }
+      
+      // 查找匹配的节点
+      const targetNode = graphData.nodes.find(node => 
+        node.name && node.name.toLowerCase().includes(nodeName.toLowerCase())
+      );
+      
+      if (targetNode) {
+        // 设置选中节点
+        selectedNode = targetNode;
+        needsRefresh = true;
+        
+        // 缩放到节点位置
+        if (targetNode.x !== undefined && targetNode.y !== undefined) {
+          graph.centerAt(targetNode.x, targetNode.y, 1000);
+          graph.zoom(2, 1000);
+        }
+        
+        // 显示详情面板
+        setTimeout(() => {
+          showDetailPanel(targetNode);
+        }, 500);
+        
+        console.log(`已高亮显示节点: ${targetNode.name}`);
+      } else {
+        console.warn(`未找到名称包含 "${nodeName}" 的节点`);
+      }
+    }
+    
+    // 将函数暴露到全局作用域
+    window.highlightNodeByName = highlightNodeByName;
+
     // 设置工具栏事件
     function setupToolbar() {
       document.getElementById('zoomInButton').addEventListener('click', () => {
@@ -3050,26 +3087,23 @@ document.addEventListener('DOMContentLoaded', function() {
         if (!query.trim()) return;
         
         // 显示加载状态
-        searchLoading.style.display = 'flex';
+        showLoadingState('AI正在分析中...');
         searchResults.style.display = 'none';
         
         try {
-          // 使用缓存的上下文数据
-          const contextData = getContextData();
-          
-          // 调用大模型API
-          const response = await callLLMAPI(query, contextData);
+          // 调用AI卡片搜索API
+          const response = await handleAICardSearch(query);
           
           // 隐藏加载状态
-          searchLoading.style.display = 'none';
+          hideLoadingState();
           
-          // 显示搜索结果
-          searchResultsContent.innerHTML = formatSearchResult(response);
+          // 显示卡片式搜索结果
+          displayCardSearchResults(response);
           searchResults.style.display = 'block';
           
         } catch (error) {
           console.error('搜索失败:', error);
-          searchLoading.style.display = 'none';
+          hideLoadingState();
           
           // 显示错误信息
           searchResultsContent.innerHTML = `
@@ -3083,51 +3117,222 @@ document.addEventListener('DOMContentLoaded', function() {
         }
       }
       
-      // 调用大模型API的函数
-      async function callLLMAPI(query, contextData) {
-        // 这里使用一个模拟的API调用，实际项目中需要替换为真实的大模型API
-        // 比如OpenAI GPT、Claude、或者其他大模型服务
+      // AI卡片搜索函数
+      async function handleAICardSearch(query) {
+        if (!query.trim()) {
+          return {
+            type: 'empty',
+            persons: [],
+            organizations: [],
+            message: '请输入您的问题。'
+          };
+        }
+
+        try {
+          const response = await fetch('/api/ai/card-search', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              query: query,
+              searchType: 'auto',
+              limit: 10
+            })
+          });
+
+          const data = await response.json();
+          
+          if (!response.ok) {
+            throw new Error(data.error || 'AI卡片搜索请求失败');
+          }
+
+          return data.data;
+          
+        } catch (error) {
+          console.error('AI卡片搜索失败:', error);
+          
+          return {
+            type: 'empty',
+            persons: [],
+            organizations: [],
+            message: error.message.includes('API key') ? 
+              '抱歉，AI服务暂时不可用。请检查API密钥配置。' : 
+              `搜索过程中出现错误：${error.message}`
+          };
+        }
+      }
+
+      // 显示卡片式搜索结果
+      function displayCardSearchResults(searchResult) {
+        // 清空之前的内容
+        searchResultsContent.innerHTML = '';
         
-        // 模拟API响应
-        return new Promise((resolve) => {
-          setTimeout(() => {
-            // 简单的关键词匹配逻辑作为演示
-            const result = analyzeQuery(query, contextData);
-            resolve(result);
-          }, 1500); // 模拟网络延迟
-        });
+        // 使用卡片组件创建搜索结果
+        if (window.cardComponents) {
+          const resultsContainer = window.cardComponents.createSearchResultsContainer(searchResult);
+          searchResultsContent.appendChild(resultsContainer);
+        } else {
+          // 降级处理：如果卡片组件未加载，显示简单的文字结果
+          searchResultsContent.innerHTML = formatFallbackSearchResult(searchResult);
+        }
+      }
+
+      // 降级搜索结果格式化（备用方案）
+      function formatFallbackSearchResult(searchResult) {
+        if (searchResult.type === 'empty') {
+          return `
+            <div style="text-align: center; padding: 40px; color: var(--text-muted);">
+              <i class="bi bi-search" style="font-size: 48px; margin-bottom: 16px; opacity: 0.6;"></i>
+              <h3>未找到相关结果</h3>
+              <p>${searchResult.message}</p>
+            </div>
+          `;
+        }
+
+        let html = '';
         
-        // 真实API调用示例（需要配置API密钥）:
-        /*
-        const response = await fetch('https://api.openai.com/v1/chat/completions', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer YOUR_API_KEY'
-          },
-          body: JSON.stringify({
-            model: 'gpt-3.5-turbo',
-            messages: [
-              {
-                role: 'system',
-                content: `你是一个智能助手，专门帮助用户查询联系人信息。以下是联系人数据：\n${JSON.stringify(contextData, null, 2)}`
-              },
-              {
-                role: 'user',
-                content: query
+        if (searchResult.persons && searchResult.persons.length > 0) {
+          html += `
+            <div style="margin-bottom: 20px;">
+              <h3 style="color: var(--text-normal); margin-bottom: 10px;">
+                <i class="bi bi-people-fill"></i> 相关人员 (${searchResult.persons.length})
+              </h3>
+              <div style="display: grid; gap: 10px;">
+                ${searchResult.persons.map(person => `
+                  <div style="padding: 12px; border: 1px solid var(--background-modifier-border); border-radius: 8px; background: var(--background-primary);">
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                      <img src="${person.avatar || '/icon/common.png'}" alt="${person.name}" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;" onerror="this.src='/icon/common.png'">
+                      <div>
+                        <strong>${person.name}</strong><br>
+                        <small style="color: var(--text-muted);">${person.title} - ${person.company}</small>
+                      </div>
+                    </div>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+          `;
+        }
+
+        if (searchResult.organizations && searchResult.organizations.length > 0) {
+          html += `
+            <div>
+              <h3 style="color: var(--text-normal); margin-bottom: 10px;">
+                <i class="bi bi-building-fill"></i> 相关组织 (${searchResult.organizations.length})
+              </h3>
+              <div style="display: grid; gap: 10px;">
+                ${searchResult.organizations.map(org => `
+                  <div style="padding: 12px; border: 1px solid var(--background-modifier-border); border-radius: 8px; background: var(--background-primary);">
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                      <img src="${org.icon || '/icon/common.png'}" alt="${org.name}" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;" onerror="this.src='/icon/common.png'">
+                      <div>
+                        <strong>${org.name}</strong><br>
+                        <small style="color: var(--text-muted);">${org.category}</small>
+                        ${org.description ? `<br><small style="color: var(--text-muted);">${org.description}</small>` : ''}
+                      </div>
+                    </div>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+          `;
+        }
+
+        return html || `
+          <div style="text-align: center; padding: 40px; color: var(--text-muted);">
+            <p>没有找到相关结果</p>
+          </div>
+        `;
+      }
+
+      // 保留原有的AI查询函数作为备用
+      async function handleAIQuery(query) {
+        if (!query.trim()) {
+          return '请输入您的问题。';
+        }
+
+        try {
+          const response = await fetch('/api/ai/chat', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${getAuthToken()}`
+            },
+            body: JSON.stringify({
+              message: query,
+              context: {
+                currentView: getCurrentViewContext(),
+                selectedFilters: getActiveFilters()
               }
-            ],
-            max_tokens: 500,
-            temperature: 0.7
-          })
-        });
-        
-        const data = await response.json();
-        return data.choices[0].message.content;
-        */
+            })
+          });
+
+          const data = await response.json();
+          
+          if (!response.ok) {
+            throw new Error(data.error || 'AI服务请求失败');
+          }
+
+          return data.data.response;
+          
+        } catch (error) {
+          console.error('AI查询失败:', error);
+          
+          if (error.message.includes('API key')) {
+            return '抱歉，AI服务暂时不可用。请检查API密钥配置。';
+          }
+          
+          return `抱歉，查询过程中出现错误：${error.message}`;
+        }
       }
       
-      // 简单的查询分析函数（演示用）
+      // 辅助函数
+      function getAuthToken() {
+        return localStorage.getItem('authToken') || sessionStorage.getItem('authToken');
+      }
+
+      function getCurrentViewContext() {
+        // 返回当前页面的上下文信息
+        return {
+          page: window.location.pathname,
+          activeTab: document.querySelector('.tab-button.active')?.textContent,
+          searchQuery: document.querySelector('#searchInput')?.value
+        };
+      }
+
+      function getActiveFilters() {
+        // 返回当前激活的过滤器
+        const filters = {};
+        const activeTagFilters = Array.from(document.querySelectorAll('.tag-filter.active'))
+          .map(el => el.textContent);
+        if (activeTagFilters.length > 0) {
+          filters.tags = activeTagFilters;
+        }
+        return filters;
+      }
+
+      function showLoadingState(message) {
+        if (searchLoading) {
+          searchLoading.style.display = 'flex';
+        }
+        const aiResponse = document.getElementById('aiResponse');
+        if (aiResponse) {
+          aiResponse.innerHTML = `<div class="loading-indicator">${message}</div>`;
+        }
+      }
+
+      function hideLoadingState() {
+        if (searchLoading) {
+          searchLoading.style.display = 'none';
+        }
+        const loadingIndicator = document.querySelector('.loading-indicator');
+        if (loadingIndicator) {
+          loadingIndicator.remove();
+        }
+      }
+      
+      // 简单的查询分析函数（演示用，作为AI API的备用方案）
       function analyzeQuery(query, contextData) {
         const lowerQuery = query.toLowerCase();
         
@@ -3151,8 +3356,6 @@ document.addEventListener('DOMContentLoaded', function() {
             return '抱歉，在当前联系人中没有找到明确标注为黑客松参与者或独立开发者的人员。';
           }
         }
-        
-
         
         // 检查是否询问联系方式
         if (lowerQuery.includes('联系方式') || lowerQuery.includes('电话') || lowerQuery.includes('邮箱')) {
@@ -3223,4 +3426,80 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // 初始化标签关联选择器
     setupRelationSelection('tagRelatedTags', 'selectedTagRelatedTags');
+    
+    // 初始化认证系统
+    initializeAuth();
   });
+  
+  // 初始化认证系统
+  function initializeAuth() {
+    // 更新UI以显示管理员按钮
+    updateAuthUI();
+    
+    // 监听认证状态变化
+    if (window.authManager) {
+      // 定期检查认证状态
+      setInterval(() => {
+        updateAuthUI();
+      }, 5000);
+    }
+  }
+  
+  // 更新认证相关UI
+  function updateAuthUI() {
+    const adminPanelBtn = document.getElementById('adminPanelBtn');
+    
+    if (window.authManager && window.authManager.isAdmin()) {
+      if (adminPanelBtn) {
+        adminPanelBtn.style.display = 'inline-block';
+      }
+    } else {
+      if (adminPanelBtn) {
+        adminPanelBtn.style.display = 'none';
+      }
+    }
+  }
+  
+  // 检查联系人所有权
+  function checkContactOwnership(contactId) {
+    // 这里应该调用后端API检查所有权
+    // 暂时返回false，实际实现需要与后端交互
+    return false;
+  }
+  
+  // 认领联系人
+  function claimContact(contactId, contactName) {
+    if (!window.authManager || !window.authManager.isLoggedIn()) {
+      alert('请先登录');
+      return;
+    }
+    
+    if (window.userManager) {
+      window.userManager.showClaimDialog(contactId, contactName);
+    }
+  }
+  
+  // 编辑联系人
+  function editContact(contactId) {
+    if (!window.authManager || !window.authManager.isLoggedIn()) {
+      alert('请先登录');
+      return;
+    }
+    
+    // 这里可以实现编辑联系人的逻辑
+    alert('编辑功能正在开发中...');
+  }
+  
+  // 移动端导航切换函数（全局函数）
+  function toggleMobileNav() {
+    const sidebar = document.querySelector('.sidebar');
+    if (sidebar) {
+      sidebar.classList.toggle('active');
+    }
+  }
+  
+  // 将函数暴露到全局作用域
+  window.checkContactOwnership = checkContactOwnership;
+  window.claimContact = claimContact;
+  window.editContact = editContact;
+  window.toggleMobileNav = toggleMobileNav;
