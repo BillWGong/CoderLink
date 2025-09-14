@@ -4,6 +4,60 @@ const { getInstance: getUserModel } = require('../models/userModel');
 const { getInstance: getJWTUtils } = require('../utils/jwt');
 require('dotenv').config();
 
+// 设置Node.js的网络配置
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'; // 临时禁用SSL验证用于调试
+const https = require('https');
+const http = require('http');
+
+// 配置代理设置（如果需要）
+const proxyConfig = {
+  timeout: 30000, // 30秒超时
+  keepAlive: true
+};
+
+// 创建自定义的HTTPS Agent
+const httpsAgent = new https.Agent({
+  timeout: 30000,
+  keepAlive: true,
+  rejectUnauthorized: false // 临时禁用SSL验证
+});
+
+// 监控HTTPS请求
+const originalRequest = https.request;
+https.request = function(options, callback) {
+  console.log('HTTPS请求:', {
+    hostname: options.hostname || options.host,
+    path: options.path,
+    method: options.method,
+    headers: options.headers,
+    timeout: options.timeout || 30000
+  });
+  
+  // 设置超时和Agent
+  options.timeout = options.timeout || 30000;
+  options.agent = httpsAgent;
+  
+  const req = originalRequest.call(this, options, callback);
+  
+  req.on('timeout', () => {
+    console.error('HTTPS请求超时:', options.hostname + options.path);
+    req.destroy();
+  });
+  
+  req.on('error', (error) => {
+    console.error('HTTPS请求错误:', {
+      message: error.message,
+      code: error.code,
+      errno: error.errno,
+      syscall: error.syscall,
+      address: error.address,
+      port: error.port
+    });
+  });
+  
+  return req;
+};
+
 class PassportConfig {
   constructor() {
     this.userModel = getUserModel();
@@ -13,10 +67,16 @@ class PassportConfig {
   }
 
   setupGitHubStrategy() {
+    console.log('设置GitHub OAuth策略，配置信息:', {
+      clientID: process.env.GITHUB_CLIENT_ID ? '已配置' : '未配置',
+      clientSecret: process.env.GITHUB_CLIENT_SECRET ? '已配置' : '未配置',
+      callbackURL: process.env.GITHUB_CALLBACK_URL || 'http://localhost:5000/login/github/authorized'
+    });
+    
     passport.use(new GitHubStrategy({
       clientID: process.env.GITHUB_CLIENT_ID,
       clientSecret: process.env.GITHUB_CLIENT_SECRET,
-      callbackURL: process.env.GITHUB_CALLBACK_URL || 'http://localhost:3000/auth/github/callback'
+      callbackURL: process.env.GITHUB_CALLBACK_URL || 'http://localhost:5000/login/github/authorized'
     },
     async (accessToken, refreshToken, profile, done) => {
       try {
@@ -68,7 +128,13 @@ class PassportConfig {
         
         return done(null, user);
       } catch (error) {
-        console.error('GitHub OAuth 策略错误:', error);
+        console.error('GitHub OAuth 策略错误:', {
+          message: error.message,
+          stack: error.stack,
+          name: error.name,
+          statusCode: error.statusCode,
+          data: error.data
+        });
         return done(error, null);
       }
     }));

@@ -14,22 +14,29 @@ const jwtUtils = getJWTUtils();
 router.get('/github', passportConfig.authenticateGitHub());
 
 // GitHub OAuth 回调
-router.get('/github/callback', 
+router.get('/github/authorized', 
   passportConfig.handleGitHubCallback(),
   async (req, res) => {
     try {
       if (!req.user) {
-        return res.redirect('/login?error=auth_failed');
+        return res.redirect('/?error=auth_failed');
       }
 
       const token = req.user.token;
       
-      // 重定向到前端，并在URL中包含令牌
-      // 在生产环境中，建议使用更安全的方式传递令牌
-      res.redirect(`/?token=${encodeURIComponent(token)}&login=success`);
+      // 设置安全的HttpOnly cookie来存储token
+      res.cookie('auth_token', token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax',
+        maxAge: 7 * 24 * 60 * 60 * 1000 // 7天
+      });
+      
+      // 直接重定向到首页，不在URL中暴露token
+      res.redirect('/?login=success');
     } catch (error) {
       console.error('GitHub回调处理错误:', error);
-      res.redirect('/login?error=callback_failed');
+      res.redirect('/?error=callback_failed');
     }
   }
 );
@@ -120,8 +127,11 @@ router.put('/profile', authMiddleware.requireAuth, async (req, res) => {
 });
 
 // 用户登出
-router.post('/logout', authMiddleware.requireAuth, async (req, res) => {
+router.post('/logout', async (req, res) => {
   try {
+    // 清除认证cookie
+    res.clearCookie('auth_token');
+    
     // 在实际应用中，可以将令牌加入黑名单
     // 这里简单返回成功消息
     res.json({
@@ -186,6 +196,76 @@ router.post('/verify', async (req, res) => {
       return res.json({
         success: true,
         valid: false,
+        message: '无效的令牌'
+      });
+    }
+  }
+});
+
+// 获取当前登录状态（从cookie中读取token）
+router.get('/status', async (req, res) => {
+  try {
+    const token = req.cookies.auth_token;
+    
+    if (!token) {
+      return res.json({
+        success: true,
+        authenticated: false,
+        message: '未登录'
+      });
+    }
+
+    const decoded = jwtUtils.verifyToken(token);
+    const user = await userModel.findById(decoded.sub);
+    
+    if (!user) {
+      // 清除无效的cookie
+      res.clearCookie('auth_token');
+      return res.json({
+        success: true,
+        authenticated: false,
+        message: '用户不存在'
+      });
+    }
+
+    // 返回用户信息和token给前端
+    res.json({
+      success: true,
+      authenticated: true,
+      token: token,
+      user: {
+        id: user.id,
+        github_id: user.github_id,
+        github_username: user.github_username,
+        email: user.email,
+        name: user.name,
+        avatar_url: user.avatar_url,
+        company: user.company,
+        location: user.location,
+        bio: user.bio,
+        role: user.role,
+        created_at: user.created_at,
+        updated_at: user.updated_at
+      },
+      expires_in: jwtUtils.getTokenRemainingTime(token)
+    });
+  } catch (error) {
+    console.error('获取登录状态错误:', error);
+    
+    // 清除无效的cookie
+    res.clearCookie('auth_token');
+    
+    if (error.message === '令牌已过期') {
+      return res.json({
+        success: true,
+        authenticated: false,
+        expired: true,
+        message: '令牌已过期'
+      });
+    } else {
+      return res.json({
+        success: true,
+        authenticated: false,
         message: '无效的令牌'
       });
     }

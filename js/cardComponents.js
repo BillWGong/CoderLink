@@ -225,22 +225,36 @@ class CardComponents {
 
   // 显示人物详情（可以与现有的详情面板集成）
   showPersonDetails(person) {
+    console.log('showPersonDetails 被调用，person数据:', person);
+    
     // 这里可以调用现有的showDetailPanel函数
     if (typeof showDetailPanel === 'function') {
       // 转换为现有系统的数据格式
       const nodeData = {
         type: 'person',
-        _id: person.id,
+        _id: person.id || person._id,
         name: person.name,
         avatar: person.avatar,
         title: person.title,
         company: person.company,
-        email: person.contact?.email,
-        phone: person.contact?.phone,
-        tags: person.tags?.map(tag => ({ name: tag })) || []
+        email: person.contact?.email || person.email,
+        phone: person.contact?.phone || person.phone,
+        wechat: person.contact?.wechat || person.wechat,
+        description: person.description || person.profile,
+        tags: person.tags?.map(tag => {
+          if (typeof tag === 'string') {
+            return { _id: tag, name: tag };
+          } else if (tag && typeof tag === 'object') {
+            return { _id: tag._id || tag.id, name: tag.name || tag };
+          }
+          return { _id: tag, name: tag };
+        }) || []
       };
+      
+      console.log('转换后的nodeData:', nodeData);
       showDetailPanel(nodeData);
     } else {
+      console.log('showDetailPanel函数不存在');
       console.log('显示人物详情:', person);
     }
   }

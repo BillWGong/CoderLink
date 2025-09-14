@@ -2,20 +2,109 @@
 class AuthManager {
   constructor() {
     this.currentUser = null;
-    this.token = localStorage.getItem('auth_token');
+    this.token = null;
     this.init();
   }
 
   async init() {
-    if (this.token) {
-      try {
-        await this.getCurrentUser();
-      } catch (error) {
-        console.error('Token validation failed:', error);
-        this.logout();
-      }
+    try {
+      const isAuthenticated = await this.checkAuthStatus();
+      console.log('认证初始化完成，认证状态:', isAuthenticated);
+    } catch (error) {
+      console.error('Auth status check failed:', error);
+      this.logout();
     }
     this.updateUI();
+    this.handleLoginCallback();
+  }
+
+  // 检查登录状态（从服务器获取）
+  async checkAuthStatus() {
+    try {
+      const response = await fetch('/auth/status', {
+        credentials: 'include' // 包含cookies
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        if (data.success && data.authenticated) {
+          this.token = data.token;
+          this.currentUser = data.user;
+          // 将token存储到localStorage以便其他请求使用
+          localStorage.setItem('auth_token', this.token);
+          console.log('认证状态检查成功，用户已登录:', this.currentUser.name || this.currentUser.github_username);
+          return true;
+        } else {
+          this.clearAuthData();
+          console.log('认证状态检查：用户未登录');
+          return false;
+        }
+      } else {
+        this.clearAuthData();
+        console.log('认证状态检查失败：服务器响应错误');
+        return false;
+      }
+    } catch (error) {
+      console.error('Error checking auth status:', error);
+      this.clearAuthData();
+      return false;
+    }
+  }
+
+  // 清除认证数据
+  clearAuthData() {
+    this.token = null;
+    this.currentUser = null;
+    localStorage.removeItem('auth_token');
+  }
+
+  // 处理登录回调
+  handleLoginCallback() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const loginSuccess = urlParams.get('login');
+    const error = urlParams.get('error');
+
+    if (loginSuccess === 'success') {
+      // 登录成功，刷新认证状态
+      console.log('检测到登录成功回调，重新检查认证状态');
+      this.checkAuthStatus().then((isAuthenticated) => {
+        console.log('登录回调后认证状态:', isAuthenticated);
+        this.updateUI();
+        // 清除URL参数
+        window.history.replaceState({}, document.title, window.location.pathname);
+        // 显示成功消息
+        this.showMessage('登录成功！', 'success');
+      });
+    } else if (error) {
+      console.error('Login error:', error);
+      this.showMessage('登录失败: ' + error, 'error');
+      // 清除URL参数
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }
+  }
+
+  // 显示消息
+  showMessage(message, type = 'info') {
+    // 创建消息提示
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `alert alert-${type === 'success' ? 'success' : type === 'error' ? 'danger' : 'info'} alert-dismissible fade show`;
+    messageDiv.style.position = 'fixed';
+    messageDiv.style.top = '20px';
+    messageDiv.style.right = '20px';
+    messageDiv.style.zIndex = '9999';
+    messageDiv.innerHTML = `
+      ${message}
+      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    `;
+    
+    document.body.appendChild(messageDiv);
+    
+    // 3秒后自动移除
+    setTimeout(() => {
+      if (messageDiv.parentNode) {
+        messageDiv.parentNode.removeChild(messageDiv);
+      }
+    }, 3000);
   }
 
   // 获取当前用户信息
@@ -50,21 +139,16 @@ class AuthManager {
   // 登出
   async logout() {
     try {
-      if (this.token) {
-        await fetch('/auth/logout', {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${this.token}`
-          }
-        });
-      }
+      await fetch('/auth/logout', {
+        method: 'POST',
+        credentials: 'include' // 包含cookies
+      });
     } catch (error) {
       console.error('Logout error:', error);
     } finally {
-      this.token = null;
-      this.currentUser = null;
-      localStorage.removeItem('auth_token');
+      this.clearAuthData();
       this.updateUI();
+      this.showMessage('已退出登录', 'info');
     }
   }
 
@@ -88,27 +172,52 @@ class AuthManager {
   updateUI() {
     const loginBtn = document.getElementById('loginBtn');
     const userInfo = document.getElementById('userInfo');
-    const adminPanel = document.getElementById('adminPanel');
+    const adminPanelBtn = document.getElementById('adminPanelBtn');
     const userAvatar = document.getElementById('userAvatar');
     const userName = document.getElementById('userName');
     const logoutBtn = document.getElementById('logoutBtn');
 
+    console.log('更新UI，当前登录状态:', this.isLoggedIn());
+    console.log('当前用户:', this.currentUser);
+    console.log('当前token:', this.token ? '存在' : '不存在');
+
     if (this.isLoggedIn()) {
+      console.log('显示用户信息界面');
       // 显示用户信息
-      if (loginBtn) loginBtn.style.display = 'none';
-      if (userInfo) userInfo.style.display = 'flex';
-      if (userAvatar) userAvatar.src = this.currentUser.avatar_url || '/images/default-avatar.png';
-      if (userName) userName.textContent = this.currentUser.display_name || this.currentUser.github_username;
+      if (loginBtn) {
+        loginBtn.style.display = 'none';
+        console.log('隐藏登录按钮');
+      }
+      if (userInfo) {
+        userInfo.style.display = 'flex';
+        console.log('显示用户信息区域');
+      }
+      if (userAvatar) {
+        userAvatar.src = this.currentUser.avatar_url || '/icon/common.png';
+        userAvatar.alt = this.currentUser.name || this.currentUser.github_username;
+        console.log('设置用户头像:', userAvatar.src);
+      }
+      if (userName) {
+        userName.textContent = this.currentUser.name || this.currentUser.github_username;
+        console.log('设置用户名:', userName.textContent);
+      }
       
-      // 显示管理员面板
-      if (adminPanel && this.isAdmin()) {
-        adminPanel.style.display = 'block';
+      // 显示管理员面板按钮
+      if (adminPanelBtn) {
+        adminPanelBtn.style.display = this.isAdmin() ? 'inline-block' : 'none';
       }
     } else {
+      console.log('显示登录按钮界面');
       // 显示登录按钮
-      if (loginBtn) loginBtn.style.display = 'block';
-      if (userInfo) userInfo.style.display = 'none';
-      if (adminPanel) adminPanel.style.display = 'none';
+      if (loginBtn) {
+        loginBtn.style.display = 'block';
+        console.log('显示登录按钮');
+      }
+      if (userInfo) {
+        userInfo.style.display = 'none';
+        console.log('隐藏用户信息区域');
+      }
+      if (adminPanelBtn) adminPanelBtn.style.display = 'none';
     }
   }
 
@@ -215,25 +324,6 @@ class AuthManager {
 
 // 全局认证管理器实例
 const authManager = new AuthManager();
-
-// 处理 GitHub 登录回调
-if (window.location.pathname === '/auth/callback') {
-  const urlParams = new URLSearchParams(window.location.search);
-  const token = urlParams.get('token');
-  const error = urlParams.get('error');
-
-  if (token) {
-    authManager.setToken(token);
-    authManager.init().then(() => {
-      // 重定向到主页
-      window.location.href = '/';
-    });
-  } else if (error) {
-    console.error('GitHub login error:', error);
-    alert('登录失败: ' + error);
-    window.location.href = '/';
-  }
-}
 
 // 导出认证管理器
 window.authManager = authManager;

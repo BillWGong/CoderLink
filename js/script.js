@@ -145,6 +145,26 @@ document.addEventListener('DOMContentLoaded', function() {
       const subtitle = document.getElementById('detailSubtitle');
       const content = document.getElementById('detailContent');
       
+      // 检查必要的DOM元素是否存在
+      if (!panel) {
+        console.error('detailPanel 元素不存在');
+        return;
+      }
+      if (!title) {
+        console.error('detailTitle 元素不存在');
+        return;
+      }
+      if (!subtitle) {
+        console.error('detailSubtitle 元素不存在');
+        return;
+      }
+      if (!content) {
+        console.error('detailContent 元素不存在');
+        return;
+      }
+      
+      console.log('所有DOM元素检查通过，开始显示面板');
+      
       // 设置面板标题和内容
       title.textContent = node.name;
       
@@ -201,8 +221,23 @@ document.addEventListener('DOMContentLoaded', function() {
       } else if (node.type === 'contact' || node.type === 'freelancer' || node.type === 'person') { // 处理联系人、自由职业者和人员
         subtitle.textContent = '联系人'
         
+        // 检查用户是否已登录以及是否可以认领此联系人
+        const isLoggedIn = window.authManager && window.authManager.isLoggedIn();
+        const canClaim = isLoggedIn; // 简化逻辑，登录用户都可以尝试认领
+        
         content.innerHTML = `
           <img src="${node.avatar || 'https://via.placeholder.com/80'}" alt="${node.name}" class="detail-avatar">
+          
+          ${canClaim ? `
+          <div class="detail-section">
+            <div class="detail-section-title">操作</div>
+            <div class="detail-actions">
+              <button class="btn btn-sm btn-success" onclick="userManager.showClaimModal('${node._id}')">
+                <i class="bi bi-person-check"></i> 认领此联系人
+              </button>
+            </div>
+          </div>
+          ` : ''}
           
           <div class="detail-section">
             <div class="detail-section-title">联系方式</div>
